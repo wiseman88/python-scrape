@@ -19,9 +19,8 @@ for img_tag in img_tags:
     img_tag.extract()
 
 if description:
-    description = str(description)
-
-    description = ''.join(char for char in description if ord(char) < 128)
+    description = description.find_all('div')[4]
+    description = description.decode_contents()
 
 else:
     print("Element not found.")
