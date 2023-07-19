@@ -12,6 +12,10 @@ soup = BeautifulSoup(html_content, "html.parser")
 meta_tag = soup.find("meta", attrs={"property": "og:title"})
 title = meta_tag.get("content") if meta_tag else "No title found."
 
+#URL
+url = soup.select_one('link[rel="canonical"]')
+url = url.get("data-savepage-href") if url else "No url found."
+
 # Description
 description = soup.find('div', attrs={'data-box-name': 'Description'})
 img_tags = description.find_all('img')
@@ -49,9 +53,8 @@ titles = [
 csv_file_path = "data/title.csv"
 
 with open(csv_file_path, "w", newline="") as csv_file:
-    writer = csv.writer(csv_file)
+    writer = csv.writer(csv_file, delimiter=' ',)
     writer.writerow(titles)  # Write header row
-    writer.writerow(["", "Default", "simple", "", "svk", title, "short_description", description, 2, "Taxable Goods",
-    "Catalog, Search", price])
+    writer.writerow(["", "Default", "simple", "", "svk", title, "short_description", description, 2, "Taxable Goods", "Catalog, Search", price, url])
 
 print("CSV file created successfully.")
