@@ -1,4 +1,5 @@
 import csv
+import re
 from bs4 import BeautifulSoup
 
 file_path = "data/index.html"
@@ -8,13 +9,18 @@ with open(file_path, "r", encoding="utf-8") as file:
 
 soup = BeautifulSoup(html_content, "html.parser")
 
-#Name
+# Name
 meta_tag = soup.find("meta", attrs={"property": "og:title"})
 title = meta_tag.get("content") if meta_tag else "No title found."
 
-#URL
+# URL
 url = soup.select_one('link[rel="canonical"]')
 url = url.get("data-savepage-href") if url else "No url found."
+
+# SKU
+
+sku = re.findall(r'\d+$', url)
+sku = ''.join(sku)
 
 # Description
 description = soup.find('div', attrs={'data-box-name': 'Description'})
@@ -29,11 +35,9 @@ if description:
 else:
     print("Element not found.")
 
-
 # Price
 price = soup.find("meta", attrs={"itemprop": "price"})
 price = price.get("content")
-
 
 # CSV titles
 titles = [
@@ -53,8 +57,9 @@ titles = [
 csv_file_path = "data/title.csv"
 
 with open(csv_file_path, "w", newline="") as csv_file:
-    writer = csv.writer(csv_file, delimiter=' ',)
+    writer = csv.writer(csv_file, delimiter=' ', )
     writer.writerow(titles)  # Write header row
-    writer.writerow(["", "Default", "simple", "", "svk", title, "short_description", description, 2, "Taxable Goods", "Catalog, Search", price, url])
+    writer.writerow([sku, "Default", "simple", "", "svk", title, "short_description", description, 2, "Taxable Goods",
+                     "Catalog, Search", price, url])
 
 print("CSV file created successfully.")
