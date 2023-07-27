@@ -69,6 +69,6 @@ with open(csv_file_path, "w", encoding="UTF8", newline="") as csv_file:
     writer = csv.writer(csv_file)
     writer.writerow(titles)  # Write header row
     writer.writerow([sku, "Default", "simple", "", "svk", title, "short_description", description, 2, "Taxable Goods",
-                     "Catalog, Search", price, url, "", "", "", additional_attributes])
+                     "Catalog, Search", price, url, "", "", "", additional_attributes, "99999","0","1","0","0","1","1","1","10000","1","1","1","1","0","1","1","1","1","0","0","0"])
 
 print("CSV file created successfully.")
