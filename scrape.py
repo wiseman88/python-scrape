@@ -49,6 +49,14 @@ def generate_additional_attributes(skladom, original_sku, original_url, rating, 
 
 additional_attributes = generate_additional_attributes(0, o_sku, url, 4.75, 28, 0)
 
+# Images
+
+images = [tag['data-savepage-src'] for tag in img_tags]
+main_image = images[0]
+additional_images = images[1:] if len(images) > 1 else None
+additional_images = ",".join(additional_images)
+
+
 # CSV titles
 titles = [
     "sku", "attribute_set_code", "product_type", "categories", "product_websites",
@@ -70,6 +78,6 @@ with open(csv_file_path, "w", encoding="UTF8", newline="") as csv_file:
     writer = csv.writer(csv_file)
     writer.writerow(titles)  # Write header row
     writer.writerow([sku, "Default", "simple", "", "svk", title, "short_description", description, 2, "Taxable Goods",
-                     "Catalog, Search", price, url, "", "", "", additional_attributes, "99999","0","1","0","0","1","1","1","10000","1","1","1","1","0","1","1","1","1","0","0","0"])
+                     "Catalog, Search", price, url, main_image, main_image, main_image, additional_attributes, "99999","0","1","0","0","1","1","1","10000","1","1","1","1","0","1","1","1","1","0","0","0", additional_images])
 
 print("CSV file created successfully.")
