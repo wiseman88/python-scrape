@@ -19,8 +19,9 @@ url = url.get("data-savepage-href") if url else "No url found."
 
 # SKU
 
-sku = re.findall(r'\d+$', url)
-sku = ''.join(sku)
+o_sku = re.findall(r'\d+$', url)
+o_sku = ''.join(o_sku)
+sku = '21' + o_sku
 
 # Description
 description = soup.find('div', attrs={'data-box-name': 'Description'})
@@ -46,7 +47,7 @@ def generate_additional_attributes(skladom, original_sku, original_url, rating, 
     return generated_additional_attributes
 
 
-additional_attributes = generate_additional_attributes(0, sku, url, 4.75, 28, 0)
+additional_attributes = generate_additional_attributes(0, o_sku, url, 4.75, 28, 0)
 
 # CSV titles
 titles = [
