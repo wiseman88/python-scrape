@@ -39,6 +39,10 @@ else:
 # Price
 price = soup.find("meta", attrs={"itemprop": "price"})
 price = price.get("content")
+price = float(price)
+price = price / 2
+price = round(price * 20) / 20
+
 
 
 # Additional attributes
