@@ -39,6 +39,15 @@ else:
 price = soup.find("meta", attrs={"itemprop": "price"})
 price = price.get("content")
 
+
+# Additional attributes
+def generate_additional_attributes(skladom, original_sku, original_url, rating, sold, incoming):
+    generated_additional_attributes = f'xxx_skladom={skladom},xxx_original_sku={original_sku},xxx_original_url={original_url},xxx_rating={rating},xxx_sold={sold},xxx_incoming={incoming}'
+    return generated_additional_attributes
+
+
+additional_attributes = generate_additional_attributes(0, sku, url, 4.75, 28, 0)
+
 # CSV titles
 titles = [
     "sku", "attribute_set_code", "product_type", "categories", "product_websites",
@@ -56,10 +65,10 @@ titles = [
 # Create a CSV file
 csv_file_path = "data/title.csv"
 
-with open(csv_file_path, "w", newline="") as csv_file:
-    writer = csv.writer(csv_file, delimiter=' ', )
+with open(csv_file_path, "w", encoding="UTF8", newline="") as csv_file:
+    writer = csv.writer(csv_file)
     writer.writerow(titles)  # Write header row
     writer.writerow([sku, "Default", "simple", "", "svk", title, "short_description", description, 2, "Taxable Goods",
-                     "Catalog, Search", price, url])
+                     "Catalog, Search", price, url, "", "", "", additional_attributes])
 
 print("CSV file created successfully.")
