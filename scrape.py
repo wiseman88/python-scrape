@@ -3,6 +3,8 @@ import csv
 import re
 from bs4 import BeautifulSoup
 
+from image_downloader import download_and_optimize_images
+
 data_folder = "data"  # Update this to the path of your data folder
 
 # CSV titles
@@ -81,6 +83,11 @@ with open(csv_file_path, "w", encoding="UTF8", newline="") as csv_file:
         main_image = images[0]
         additional_images = images[1:] if len(images) > 1 else None
         additional_images = ",".join(additional_images)
+
+        if __name__ == "__main__":
+
+            output_folder = f"output_images/{sku}"
+            download_and_optimize_images(images, output_folder)
 
         # Write the row to the CSV file
         writer.writerow([sku, "Default", "simple", "", "svk", title, "short_description", description, 2, "Taxable Goods",
