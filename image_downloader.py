@@ -1,4 +1,6 @@
 import os
+import re
+
 import requests
 from PIL import Image
 from io import BytesIO
@@ -12,11 +14,11 @@ csv_file = 'data/output.csv'
 df = pd.read_csv(csv_file)
 
 
-def download_and_optimize_images(image_urls, output_folder, max_width=1000, max_height=1000):
+def download_and_optimize_images(image_urls, output_folder, product_name, max_width=1000, max_height=1000):
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
-    for url in image_urls:
+    for i, url in enumerate(image_urls, start=1):
         try:
             response = requests.get(url)
             response.raise_for_status()
@@ -24,7 +26,8 @@ def download_and_optimize_images(image_urls, output_folder, max_width=1000, max_
             image = Image.open(BytesIO(response.content))
             image.thumbnail((max_width, max_height), Image.LANCZOS if hasattr(Image, 'LANCZOS') else Image.ANTIALIAS)
 
-            image_filename = os.path.basename(url)
+            # image_filename = os.path.basename(url)
+            image_filename = slugify(product_name) + f'-megamix-{i}'
             output_path = os.path.join(output_folder, image_filename)
 
             if not image_format_is_supported(image):
@@ -46,6 +49,15 @@ def image_format_is_supported(image):
     return image.format in ("JPEG", "PNG", "GIF")
 
 
+def slugify(item):
+    # Remove special characters, spaces, and convert to lowercase
+    slug = re.sub(r'[^a-zA-Z0-9\s]', '', item).strip().lower()
+    # Replace spaces with dashes
+    slug = re.sub(r'\s+', '-', slug)
+
+    return slug
+
+
 df['images'] = df['base_image'] + ',' + df['additional_images']
 
 # Iterate through each row in the DataFrame
@@ -60,4 +72,7 @@ for index, row in df.iterrows():
 
     print(f"Images for SKU {sku}: {images}")
 
-    download_and_optimize_images(images, folder_to_save_images)
+    download_and_optimize_images(images, folder_to_save_images, name)
+
+    # TODO
+    # - install unidecode to slugify slovak title
