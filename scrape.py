@@ -1,5 +1,6 @@
 import os
 import csv
+import random
 import re
 from bs4 import BeautifulSoup
 
@@ -77,7 +78,11 @@ with open(csv_file_path, "w", encoding="UTF8", newline="") as csv_file:
             generated_additional_attributes = f'xxx_skladom={skladom},xxx_original_sku={original_sku},xxx_original_url={original_url},xxx_rating={rating},xxx_sold={sold},xxx_incoming={incoming}'
             return generated_additional_attributes
 
-        additional_attributes = generate_additional_attributes(0, o_sku, url, 4.75, 28, 0)
+
+        rating = round(random.uniform(4.65, 4.99), 2)
+        sold = round(random.uniform(10, 200))
+
+        additional_attributes = generate_additional_attributes(0, o_sku, url, rating, sold, 0)
 
         # Images
         images = [tag['data-savepage-src'] for tag in img_tags]
