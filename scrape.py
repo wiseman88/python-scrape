@@ -53,14 +53,15 @@ with open(csv_file_path, "w", encoding="UTF8", newline="") as csv_file:
         sku = '21' + o_sku
 
         # Description
-        description = soup.find('div', attrs={'data-box-name': 'Description'})
-        img_tags = description.find_all('img')
-        for img_tag in img_tags:
-            img_tag.extract()
+        html = soup.find('div', attrs={'data-box-name': 'Description'})
+        img_tags = html.find_all('img')
 
-        if description:
-            description = description.find_all('div')[4]
-            description = description.decode_contents()
+        if html:
+            desc = html.find_all('div', class_='mgn2_16 _0d3bd_am0a-')
+            description = ''
+            for div in desc:
+                div_content = ''.join(map(str, div.contents))
+                description += div_content
         else:
             print("Element not found.")
 
