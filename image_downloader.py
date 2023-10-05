@@ -3,6 +3,13 @@ import requests
 from PIL import Image
 from io import BytesIO
 import traceback
+import pandas as pd
+
+# Define the CSV file path
+csv_file = 'data/output.csv'
+
+# Read the CSV file into a pandas DataFrame
+df = pd.read_csv(csv_file)
 
 
 def download_and_optimize_images(image_urls, output_folder, max_width=1000, max_height=1000):
@@ -37,3 +44,20 @@ def download_and_optimize_images(image_urls, output_folder, max_width=1000, max_
 
 def image_format_is_supported(image):
     return image.format in ("JPEG", "PNG", "GIF")
+
+
+df['images'] = df['base_image'] + ',' + df['additional_images']
+
+# Iterate through each row in the DataFrame
+for index, row in df.iterrows():
+    sku = row['sku']
+    name = row['name']
+    images = row['images']
+    images = images.strip('[]').split(',')
+    images = [item.strip() for item in images]
+
+    folder_to_save_images = f"output_images/{sku}"
+
+    print(f"Images for SKU {sku}: {images}")
+
+    download_and_optimize_images(images, folder_to_save_images)
