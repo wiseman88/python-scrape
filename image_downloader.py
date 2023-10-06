@@ -6,6 +6,7 @@ from PIL import Image
 from io import BytesIO
 import traceback
 import pandas as pd
+from unidecode import unidecode
 
 # Define the CSV file path
 csv_file = 'data/output.csv'
@@ -50,6 +51,8 @@ def image_format_is_supported(image):
 
 
 def slugify(item):
+    # Convert non-ASCII characters to ASCII using unidecode
+    item = unidecode(item)
     # Remove special characters, spaces, and convert to lowercase
     slug = re.sub(r'[^a-zA-Z0-9\s]', '', item).strip().lower()
     # Replace spaces with dashes
