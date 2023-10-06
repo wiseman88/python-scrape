@@ -24,10 +24,11 @@ def download_and_optimize_images(image_urls, output_folder, product_name, max_wi
             response = requests.get(url)
             response.raise_for_status()
 
+            # image optimize
             image = Image.open(BytesIO(response.content))
             image.thumbnail((max_width, max_height), Image.LANCZOS if hasattr(Image, 'LANCZOS') else Image.ANTIALIAS)
 
-            # image_filename = os.path.basename(url)
+            # image rename
             image_filename = slugify(product_name) + f'-megamix-{i}'
             output_path = os.path.join(output_folder, image_filename)
 
