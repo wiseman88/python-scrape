@@ -7,3 +7,8 @@ class CSVParser:
 
     def get_images_url(self, base_image_col, additional_images_col):
         self.df['images'] = self.df[base_image_col] + ',' + self.df[additional_images_col]
+        return self.df['images']
+
+    def csv_rows(self):
+        rows = self.df.iterrows()
+        return rows
