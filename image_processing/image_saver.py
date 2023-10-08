@@ -24,3 +24,10 @@ class ImageSaver:
         image.save(path, format=image.format)
         print(f"Downloaded and optimized: {url}")
 
+    @staticmethod
+    def save_images_to_folder(name, image_urls, folder_to_save_images):
+        for i, url in enumerate(image_urls, start=1):
+            try:
+                ImageSaver.save_image(i, url, name, folder_to_save_images)
+            except Exception as e:
+                print(f"Error downloading image {i} for {name}: {str(e)}")
