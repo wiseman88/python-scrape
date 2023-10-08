@@ -10,3 +10,6 @@ output_images/
 
 #Files
 *.html
+
+# Compiled Python files
+__pycache__/
