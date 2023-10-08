@@ -12,3 +12,18 @@ class CSVParser:
     def csv_rows(self):
         rows = self.df.iterrows()
         return rows
+
+    @staticmethod
+    def process_images_row(images_str):
+        images_str = images_str.strip('[]').split(',')
+        images_str = [item.strip() for item in images_str]
+        return images_str
+
+    @staticmethod
+    def process_csv_row(row):
+        sku = row['sku']
+        name = row['name']
+        images = CSVParser.process_images_row(row['images'])
+
+        folder_to_save_images = f"../data/output_images/{sku}"
+        return name, images, folder_to_save_images
