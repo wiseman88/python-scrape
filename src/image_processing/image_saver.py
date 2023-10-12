@@ -1,7 +1,7 @@
 import os
 
-from image_processing.image_downloader import ImageDownloader
-from image_processing.image_optimizer import ImageOptimizer
+from src.image_processing.image_downloader import ImageDownloader
+from src.image_processing.image_optimizer import ImageOptimizer
 
 
 class ImageSaver:

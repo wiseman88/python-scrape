@@ -21,7 +21,7 @@ titles = [
 ]
 
 # Create a CSV file
-csv_file_path = "data/output.csv"
+csv_file_path = "../data/output.csv"
 
 with open(csv_file_path, "w", encoding="UTF8", newline="") as csv_file:
     writer = csv.writer(csv_file)
