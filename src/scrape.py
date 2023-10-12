@@ -21,7 +21,7 @@ titles = [
 ]
 
 # Create a CSV file
-csv_file_path = "../data/output.csv"
+csv_file_path = "data/output.csv"
 
 with open(csv_file_path, "w", encoding="UTF8", newline="") as csv_file:
     writer = csv.writer(csv_file)
@@ -76,7 +76,6 @@ with open(csv_file_path, "w", encoding="UTF8", newline="") as csv_file:
             generated_additional_attributes = f'xxx_skladom={skladom},xxx_original_sku={original_sku},xxx_original_url={original_url},xxx_rating={rating},xxx_sold={sold},xxx_incoming={incoming}'
             return generated_additional_attributes
 
-
         rating = round(random.uniform(4.65, 4.99), 2)
         sold = round(random.uniform(10, 200))
 
@@ -89,7 +88,10 @@ with open(csv_file_path, "w", encoding="UTF8", newline="") as csv_file:
         additional_images = ",".join(additional_images)
 
         # Write the row to the CSV file
-        writer.writerow([sku, "Default", "simple", "", "svk", title, "short_description", description, 2, "Taxable Goods",
-                         "Catalog, Search", price, url, main_image, main_image, main_image, additional_attributes, "99999", "0", "1", "0", "0", "1", "1", "1", "10000", "1", "1", "1", "1", "0", "1", "1", "1", "1", "0", "0", "0", additional_images])
+        writer.writerow(
+            [sku, "Default", "simple", "", "svk", title, "short_description", description, 2, "Taxable Goods",
+             "Catalog, Search", price, url, main_image, main_image, main_image, additional_attributes, "99999", "0",
+             "1", "0", "0", "1", "1", "1", "10000", "1", "1", "1", "1", "0", "1", "1", "1", "1", "0", "0", "0",
+             additional_images])
 
 print("CSV file created successfully.")
