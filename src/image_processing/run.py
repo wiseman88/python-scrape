@@ -1,7 +1,7 @@
 from src.image_processing.csv_parser import CSVParser
 from src.image_processing.image_saver import ImageSaver
 
-file_path = '../../data/output.csv'
+file_path = '../data/output.csv'
 
 csv_parser = CSVParser(file_path)
 csv_parser.create_images_column('base_image', 'additional_images')
