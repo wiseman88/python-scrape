@@ -14,7 +14,7 @@ class ImageSaver:
 
         image = ImageOptimizer.resize_image(image)
 
-        image_filename = ImageOptimizer.slugify_image_name(product_name) + f'-megamix-{i}'
+        image_filename = ImageOptimizer.slugify_image_name(product_name) + f'-megamix-{i}' + '.jpeg'
 
         path = os.path.join(output_folder,  image_filename)
 
