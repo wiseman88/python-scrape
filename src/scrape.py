@@ -4,7 +4,8 @@ import random
 import re
 from bs4 import BeautifulSoup
 
-data_folder = "data"  # Update this to the path of your data folder
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+data_folder = os.path.join(BASE_DIR, 'data')
 
 # CSV titles
 titles = [
@@ -21,7 +22,8 @@ titles = [
 ]
 
 # Create a CSV file
-csv_file_path = "data/output.csv"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+csv_file_path = os.path.join(BASE_DIR, 'data', 'output.csv')
 
 with open(csv_file_path, "w", encoding="UTF8", newline="") as csv_file:
     writer = csv.writer(csv_file)
