@@ -1,8 +1,7 @@
 import os
 import csv
-import random
-import re
 from bs4 import BeautifulSoup
+from scrape.product import Product
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 data_folder = os.path.join(BASE_DIR, 'data')
@@ -41,53 +40,31 @@ with open(csv_file_path, "w", encoding="UTF8", newline="") as csv_file:
         soup = BeautifulSoup(html_content, "html.parser")
 
         # Name
-        meta_tag = soup.find("meta", attrs={"property": "og:title"})
-        title = meta_tag.get("content") if meta_tag else "No title found."
+        title = Product.extract_title(soup)
 
         # URL
-        url = soup.select_one('link[rel="canonical"]')
-        url = url.get("data-savepage-href") if url else "No url found."
+        url = Product.extract_url(soup)
 
         # SKU
-        o_sku = re.findall(r'\d+$', url)
-        o_sku = ''.join(o_sku)
-        sku = '21' + o_sku
+        o_sku = Product.extract_o_sku(soup)
+        sku = Product.create_sku(soup)
 
         # Description
-        html = soup.find('div', attrs={'data-box-name': 'Description'})
-        img_tags = html.find_all('img')
-
-        if html:
-            desc = html.find_all('div', class_='mgn2_16 _0d3bd_am0a-')
-            description = ''
-            for div in desc:
-                div_content = ''.join(map(str, div.contents))
-                description += div_content
-        else:
-            print("Element not found.")
+        img_tags = Product.extract_img_tags(Product.find_description_section(soup))
+        description = Product.description(Product.find_description_section(soup))
 
         # Price
-        price = soup.find("meta", attrs={"itemprop": "price"})
-        price = price.get("content")
-        price = float(price)
-        price = price / 2
-        price = round(price * 20) / 20
+        price = Product.price(soup)
 
         # Additional attributes
-        def generate_additional_attributes(skladom, original_sku, original_url, rating, sold, incoming):
-            generated_additional_attributes = f'xxx_skladom={skladom},xxx_original_sku={original_sku},xxx_original_url={original_url},xxx_rating={rating},xxx_sold={sold},xxx_incoming={incoming}'
-            return generated_additional_attributes
-
-        rating = round(random.uniform(4.65, 4.99), 2)
-        sold = round(random.uniform(10, 200))
-
-        additional_attributes = generate_additional_attributes(0, o_sku, url, rating, sold, 0)
+        rating = Product.rating()
+        sold = Product.sold()
+        additional_attributes = Product.generate_additional_attributes(0, o_sku, url, rating, sold, 0)
 
         # Images
-        images = [tag['data-savepage-src'] for tag in img_tags]
-        main_image = images[0]
-        additional_images = images[1:] if len(images) > 1 else None
-        additional_images = ",".join(additional_images)
+        all_images = Product.extract_images(img_tags)
+        main_image = all_images[0]
+        additional_images = Product.additional_images(all_images)
 
         # Write the row to the CSV file
         writer.writerow(
