@@ -38,23 +38,24 @@ with open(csv_file_path, "w", encoding="UTF8", newline="") as csv_file:
             html_content = file.read()
 
         soup = BeautifulSoup(html_content, "html.parser")
+        product = Product(html_content)
 
         # Name
-        title = Product.extract_title(soup)
+        title = product.extract_title()
 
         # URL
-        url = Product.extract_url(soup)
+        url = product.extract_url()
 
         # SKU
-        o_sku = Product.extract_o_sku(soup)
-        sku = Product.create_sku(soup)
+        o_sku = product.extract_o_sku()
+        sku = product.create_sku()
 
         # Description
-        img_tags = Product.extract_img_tags(Product.find_description_section(soup))
-        description = Product.description(Product.find_description_section(soup))
+        img_tags = product.extract_img_tags()
+        description = product.description()
 
         # Price
-        price = Product.price(soup)
+        price = product.price()
 
         # Additional attributes
         rating = Product.rating()
@@ -62,7 +63,7 @@ with open(csv_file_path, "w", encoding="UTF8", newline="") as csv_file:
         additional_attributes = Product.generate_additional_attributes(0, o_sku, url, rating, sold, 0)
 
         # Images
-        all_images = Product.extract_images(img_tags)
+        all_images = product.extract_images()
         main_image = all_images[0]
         additional_images = Product.additional_images(all_images)
 

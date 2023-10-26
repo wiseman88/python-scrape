@@ -8,48 +8,41 @@ class Product:
     def __init__(self, html_content):
         self.soup = BeautifulSoup(html_content, "html.parser")
 
-    @staticmethod
-    def extract_title(soup):
-        meta_tag = soup.find("meta", attrs={"property": "og:title"})
+    def extract_title(self):
+        meta_tag = self.soup.find("meta", attrs={"property": "og:title"})
         return meta_tag.get("content") if meta_tag else "No title found."
 
-    @staticmethod
-    def extract_url(soup):
-        url = soup.select_one('link[rel="canonical"]')
+    def extract_url(self):
+        url = self.soup.select_one('link[rel="canonical"]')
         return url.get("data-savepage-href") if url else "No url found."
 
-    @staticmethod
-    def extract_o_sku(soup):
-        o_sku = re.findall(r'\d+$', Product.extract_url(soup))
+    def extract_o_sku(self):
+        o_sku = re.findall(r'\d+$', self.extract_url())
         o_sku = ''.join(o_sku)
         return o_sku
 
-    @staticmethod
-    def create_sku(soup):
-        return '21' + Product.extract_o_sku(soup)
+    def create_sku(self):
+        return '21' + self.extract_o_sku()
 
-    @staticmethod
-    def find_description_section(soup):
-        return soup.find('div', attrs={'data-box-name': 'Description'})
+    def find_description_section(self):
+        return self.soup.find('div', attrs={'data-box-name': 'Description'})
 
-    @staticmethod
-    def extract_img_tags(desc_section):
-        return desc_section.find_all('img')
+    def extract_img_tags(self):
+        return Product.find_description_section(self).find_all('img')
 
-    @staticmethod
-    def description(html):
-        if html:
-            desc = html.find_all('div', class_='mgn2_16 _0d3bd_am0a-')
+    def description(self):
+        if self.find_description_section():
+            desc = self.find_description_section().find_all('div', class_='mgn2_16 _0d3bd_am0a-')
             description = ''
             for div in desc:
                 div_content = ''.join(map(str, div.contents))
                 description += div_content
+            return description
         else:
             print("Element not found.")
 
-    @staticmethod
-    def price(soup):
-        price = float(soup.find("meta", attrs={"itemprop": "price"}).get("content"))
+    def price(self):
+        price = float(self.soup.find("meta", attrs={"itemprop": "price"}).get("content"))
         return round(price / 2 * 20) / 20
 
     @staticmethod
@@ -65,9 +58,8 @@ class Product:
     def sold():
         return round(random.uniform(10, 200))
 
-    @staticmethod
-    def extract_images(img_tags):
-        return [tag['data-savepage-src'] for tag in img_tags]
+    def extract_images(self):
+        return [tag['data-savepage-src'] for tag in self.extract_img_tags()]
 
     @staticmethod
     def additional_images(images):
