@@ -1,13 +1,18 @@
+import os
 import unittest
 import pandas as pd
 from src.image_processing.csv_parser import CSVParser
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+root_dir = os.path.dirname(os.path.dirname(current_dir))
+data_dir = os.path.join(root_dir, 'data', 'input_csv', 'sample.csv')
 
 
 class TestCSVParser(unittest.TestCase):
 
     def setUp(self):
 
-        self.file_path = "../data/input_csv/sample.csv"
+        self.file_path = data_dir
 
         self.parser = CSVParser(self.file_path)
 
