@@ -1,10 +1,10 @@
 import os
 import csv
-import random
-import re
 from bs4 import BeautifulSoup
+from scrape.product import Product
 
-data_folder = "data"  # Update this to the path of your data folder
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+data_folder = os.path.join(BASE_DIR, 'data')
 
 # CSV titles
 titles = [
@@ -21,7 +21,8 @@ titles = [
 ]
 
 # Create a CSV file
-csv_file_path = "data/output.csv"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+csv_file_path = os.path.join(BASE_DIR, 'data', 'output.csv')
 
 with open(csv_file_path, "w", encoding="UTF8", newline="") as csv_file:
     writer = csv.writer(csv_file)
@@ -37,55 +38,34 @@ with open(csv_file_path, "w", encoding="UTF8", newline="") as csv_file:
             html_content = file.read()
 
         soup = BeautifulSoup(html_content, "html.parser")
+        product = Product(html_content)
 
         # Name
-        meta_tag = soup.find("meta", attrs={"property": "og:title"})
-        title = meta_tag.get("content") if meta_tag else "No title found."
+        title = product.extract_title()
 
         # URL
-        url = soup.select_one('link[rel="canonical"]')
-        url = url.get("data-savepage-href") if url else "No url found."
+        url = product.extract_url()
 
         # SKU
-        o_sku = re.findall(r'\d+$', url)
-        o_sku = ''.join(o_sku)
-        sku = '21' + o_sku
+        o_sku = product.extract_o_sku()
+        sku = product.create_sku()
 
         # Description
-        html = soup.find('div', attrs={'data-box-name': 'Description'})
-        img_tags = html.find_all('img')
-
-        if html:
-            desc = html.find_all('div', class_='mgn2_16 _0d3bd_am0a-')
-            description = ''
-            for div in desc:
-                div_content = ''.join(map(str, div.contents))
-                description += div_content
-        else:
-            print("Element not found.")
+        img_tags = product.extract_img_tags()
+        description = product.description()
 
         # Price
-        price = soup.find("meta", attrs={"itemprop": "price"})
-        price = price.get("content")
-        price = float(price)
-        price = price / 2
-        price = round(price * 20) / 20
+        price = product.price()
 
         # Additional attributes
-        def generate_additional_attributes(skladom, original_sku, original_url, rating, sold, incoming):
-            generated_additional_attributes = f'xxx_skladom={skladom},xxx_original_sku={original_sku},xxx_original_url={original_url},xxx_rating={rating},xxx_sold={sold},xxx_incoming={incoming}'
-            return generated_additional_attributes
-
-        rating = round(random.uniform(4.65, 4.99), 2)
-        sold = round(random.uniform(10, 200))
-
-        additional_attributes = generate_additional_attributes(0, o_sku, url, rating, sold, 0)
+        rating = Product.rating()
+        sold = Product.sold()
+        additional_attributes = Product.generate_additional_attributes(0, o_sku, url, rating, sold, 0)
 
         # Images
-        images = [tag['data-savepage-src'] for tag in img_tags]
-        main_image = images[0]
-        additional_images = images[1:] if len(images) > 1 else None
-        additional_images = ",".join(additional_images)
+        all_images = product.extract_images()
+        main_image = all_images[0]
+        additional_images = Product.additional_images(all_images)
 
         # Write the row to the CSV file
         writer.writerow(
