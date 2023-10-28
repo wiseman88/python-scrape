@@ -31,15 +31,18 @@ class Product:
         return Product.find_description_section(self).find_all('img')
 
     def description(self):
-        if self.find_description_section():
-            desc = self.find_description_section().find_all('div', class_='mgn2_16 _0d3bd_am0a-')
-            description = ''
-            for div in desc:
-                div_content = ''.join(map(str, div.contents))
-                description += div_content
-            return description
-        else:
+        description_section = self.find_description_section()
+
+        if not description_section:
             print("Element not found.")
+            return
+
+        # Find all div tags within parent tag of specified class
+        divs = description_section.find_all('div', class_='mgn2_16 _0d3bd_am0a-')
+        # For each div extract its html tags with content and merge them in single description
+        description = ''.join(''.join(map(str, div.contents)) for div in divs)
+
+        return description
 
     def price(self):
         price = float(self.soup.find("meta", attrs={"itemprop": "price"}).get("content"))
