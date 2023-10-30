@@ -1,7 +1,7 @@
 import os
 from scrape.product import Product
 from utils.file_utils import ensure_directory_exists, get_html_files
-from utils.csv_utils import write_to_csv
+from utils.csv_utils import write_to_csv, create_csv_row
 from common.constants import TITLES
 
 
@@ -46,14 +46,8 @@ def main():
         additional_images = Product.additional_images(all_images)
 
         # Write the row to the CSV file
-        row = [
-            sku, "Default", "simple", "", "svk", title, "short_description",
-            description, 2, "Taxable Goods", "Catalog, Search", price, url,
-            main_image, main_image, main_image, additional_attributes,
-            "99999", "0", "1", "0", "0", "1", "1", "1", "10000", "1",
-            "1", "1", "1", "0", "1", "1", "1", "1", "0", "0", "0",
-            additional_images
-        ]
+        row = create_csv_row(sku, title, description, price, url, main_image,
+                             additional_attributes, additional_images)
 
         csv_data['rows'].append(row)
 
