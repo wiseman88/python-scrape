@@ -2,9 +2,14 @@ import os
 import csv
 from bs4 import BeautifulSoup
 from scrape.product import Product
+from utils.file_utils import ensure_directory_exists, get_html_files
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-data_folder = os.path.join(BASE_DIR, 'data')
+base_dir = os.path.dirname(os.path.abspath(__file__))
+data_folder = os.path.join(base_dir, 'data')
+ensure_directory_exists(data_folder)
+
+# Create a CSV file
+csv_file_path = os.path.join(base_dir, 'data', 'output.csv')
 
 # CSV titles
 titles = [
@@ -20,18 +25,11 @@ titles = [
     "is_decimal_divided", "website_id", "additional_images"
 ]
 
-# Create a CSV file
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-csv_file_path = os.path.join(BASE_DIR, 'data', 'output.csv')
-
 with open(csv_file_path, "w", encoding="UTF8", newline="") as csv_file:
     writer = csv.writer(csv_file)
     writer.writerow(titles)  # Write header row
 
-    # Get a list of all HTML files in the data folder
-    html_files = [file for file in os.listdir(data_folder) if file.endswith(".html")]
-
-    for file_name in html_files:
+    for file_name in get_html_files(data_folder):
         file_path = os.path.join(data_folder, file_name)
 
         with open(file_path, "r", encoding="utf-8") as file:
