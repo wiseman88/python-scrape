@@ -31,7 +31,6 @@ def main():
         url = product.extract_url()
         o_sku = product.extract_o_sku()
         sku = product.create_sku()
-        img_tags = product.extract_img_tags()
         description = product.description()
         price = product.price()
 
