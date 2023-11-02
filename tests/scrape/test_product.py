@@ -15,12 +15,12 @@ class TestProduct(unittest.TestCase):
         </head>
         <body>
             <h1>Welcome to my website</h1>
-            <div data-box-name="Description"><img data-savepage-src="https://img-1"/><img data-savepage-src="https://img-2"/><div class="mgn2_16 _0d3bd_am0a-"><h1>Test product</h1></div></div>
+            <div data-box-name="Description"><img data-savepage-src="https://img-1"/><img data-savepage-src="https://img-2"/><div class="mgn2_16 _0d3bd_am0a-"><h1>Test scrape</h1></div></div>
         </body>
         </html>
         """
         self.product_html = Product(self.html)
-        self.description = '<div data-box-name="Description"><img data-savepage-src="https://img-1"/><img data-savepage-src="https://img-2"/><div class="mgn2_16 _0d3bd_am0a-"><h1>Test product</h1></div></div>'
+        self.description = '<div data-box-name="Description"><img data-savepage-src="https://img-1"/><img data-savepage-src="https://img-2"/><div class="mgn2_16 _0d3bd_am0a-"><h1>Test scrape</h1></div></div>'
         self.images_url = ['https://img-1', 'https://img-2', 'https://img-3']
 
     def test_extract_valid_title(self):
@@ -48,7 +48,7 @@ class TestProduct(unittest.TestCase):
 
     def test_description(self):
         description = Product.description(self.product_html)
-        self.assertEqual(str(description), str('<h1>Test product</h1>'))
+        self.assertEqual(str(description), str('<h1>Test scrape</h1>'))
 
     def test_price(self):
         price = Product.price(self.product_html)

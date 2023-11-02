@@ -21,7 +21,7 @@ class TestImageSaver(unittest.TestCase):
 
         mock_download.return_value = mock_image
         mock_resize.return_value = mock_image
-        mock_slugify.return_value = "product-name"
+        mock_slugify.return_value = "scrape-name"
 
         ImageSaver.save_image(1, "http://example.com/image.jpg", "Product Name", "output_folder")
 
