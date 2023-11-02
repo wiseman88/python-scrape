@@ -16,24 +16,20 @@ class Scrape:
             file_path = os.path.join(self.data_folder, file_name)
             product_data = self.process_product_file(file_path)
 
-            row = create_csv_row(
-                product_data["sku"],
-                product_data["title"],
-                product_data["description"],
-                product_data["price"],
-                product_data["url"],
-                product_data["main_image"],
-                product_data["additional_attributes"],
-                product_data["additional_images"]
-            )
+            # Create row and fill each column with data extracted from each product .html file
+            row = create_csv_row(**product_data)
             self.csv_data['rows'].append(row)
 
     @staticmethod
-    def process_product_file(file_path):
-        with open(file_path, "r", encoding="utf-8") as file:
-            html_content = file.read()
+    def read_file(file_path):
+        try:
+            with open(file_path, "r", encoding="utf-8") as file:
+                return file.read()
+        except IOError as e:
+            raise IOError(f"Error reading {file_path}: {e}")
 
-        product = Product(html_content)
+    def process_product_file(self, file_path):
+        product = Product(self.read_file(file_path))
 
         return {
             "sku": product.create_sku(),
