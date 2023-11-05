@@ -32,7 +32,7 @@ class TestCSVParser(unittest.TestCase):
     def test_process_images_row(self):
         images_str = 'img1.jpg,img2.jpg,img3.jpg'
         expected_output = ['img1.jpg', 'img2.jpg', 'img3.jpg']
-        self.assertEqual(CSVParser.process_images_row(images_str), expected_output)
+        self.assertEqual(CSVParser.get_product_image_urls(images_str), expected_output)
 
     def test_process_csv_row(self):
         sample_row = pd.Series({'sku': '1', 'name': 'Product 1', 'images': 'img1.jpg,img2.jpg,img3.jpg'})

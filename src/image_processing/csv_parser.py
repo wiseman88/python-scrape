@@ -14,16 +14,14 @@ class CSVParser:
         return rows
 
     @staticmethod
-    def process_images_row(images_str):
-        images_str = images_str.strip('[]').split(',')
-        images_str = [item.strip() for item in images_str]
-        return images_str
+    def get_product_image_urls(images_str):
+        return [item.strip() for item in images_str.strip('[]').split(',')]
 
     @staticmethod
     def process_csv_row(row):
         sku = row['sku']
         name = row['name']
-        images = CSVParser.process_images_row(row['images'])
+        images = CSVParser.get_product_image_urls(row['images'])
 
         folder_to_save_images = f"../data/output_images/{sku}"
         return name, images, folder_to_save_images
