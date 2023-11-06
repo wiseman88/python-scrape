@@ -16,11 +16,6 @@ class ImageOptimizer:
 
     @staticmethod
     def slugify_image_name(name):
-        # Convert non-ASCII characters to ASCII using unidecode
         name = unidecode(name)
-        # Remove special characters, spaces, and convert to lowercase
-        slug = re.sub(r'[^a-zA-Z0-9\s]', '', name).strip().lower()
-        # Replace spaces with dashes
-        slug = re.sub(r'\s+', '-', slug)
-
+        slug = re.sub(r'\W+', '-', name).strip().lower()
         return slug
