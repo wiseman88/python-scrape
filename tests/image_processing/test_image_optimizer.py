@@ -22,6 +22,11 @@ class TestImageOptimizer(unittest.TestCase):
         image = Image.open(image_data)
         self.assertTrue(ImageOptimizer.check_image_format(image))
 
+    def test_slugify_image_name(self):
+        test_product_name = "Bottle of * John Jay * Keeshan"
+        expected_output = "bottle-of-john-jay-keeshan"
+        self.assertEqual(ImageOptimizer.slugify_image_name(test_product_name), expected_output)
+
 
 if __name__ == '__main__':
     unittest.main()
